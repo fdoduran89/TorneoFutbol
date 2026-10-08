@@ -30,6 +30,11 @@ public class Empleado extends Persona{
     */
     public float liquidarSalario(){
         
+        /*
+        Se hace el calculo del salario del empleado
+        Tomando el salario y restandole la retencion
+        */
+        
         return salario - retencion;
         
     }
