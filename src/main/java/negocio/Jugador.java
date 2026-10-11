@@ -1,4 +1,3 @@
-
 package negocio;
 
 
@@ -91,12 +90,13 @@ public class Jugador extends Empleado{
     
     public void obtenerPromedio(){
         promedio = calcularPromedioJugador();
-        System.out.println("El promedio del jugador: "+ nombre + " es:"+ promedio);
+        System.out.println("El promedio del jugador: "+ nombre + " es: "+ promedio);
     }
     
     private float calcularPromedioJugador(){
-        this.promedio = (cabeza+regate+velocidad)/3;
-        if(promedio<0){
+        float calculo = (cabeza + regate + velocidad) / 3.0f;
+        this.promedio = Math.round(calculo * 10.0f) / 10.0f;
+        if(promedio < 0){
             promedio = 0;
         }
         return promedio;

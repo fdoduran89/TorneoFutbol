@@ -1,4 +1,3 @@
-
 package negocio;
 
 import java.util.ArrayList;
@@ -9,12 +8,16 @@ public class Equipo {
     private String color;
     
     private DT dt;
+
+    private EntrenadorFisico entrenadorFisico;
+
+    private Medico medico;
     
     private String escudo;
     
     private String fundacion;
     
-    private ArrayList<Jugador> jugadores;
+    private ArrayList<Jugador> jugadores = new ArrayList<>();
     
     private String nombre;
 
@@ -34,6 +37,22 @@ public class Equipo {
         this.dt = dt;
     }
 
+    public EntrenadorFisico getEntrenadorFisico() {
+        return entrenadorFisico;
+    }
+
+    public void setEntrenadorFisico(EntrenadorFisico entrenadorFisico) {
+        this.entrenadorFisico = entrenadorFisico;
+    }
+
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
     public String getEscudo() {
         return escudo;
     }
@@ -50,14 +69,6 @@ public class Equipo {
         this.fundacion = fundacion;
     }
 
-    /*public ArrayList<Jugador> getJugadores() {
-        return jugadores;
-    }
-
-    public void setJugadores(ArrayList<Jugador> jugadores) {
-        this.jugadores = jugadores;
-    }*/
-
     public String getNombre() {
         return nombre;
     }
@@ -67,9 +78,6 @@ public class Equipo {
     }
     
     public void addJugador(Jugador jugador){
-        if(jugadores == null){
-            jugadores = new ArrayList<>();
-        }
         jugadores.add(jugador);
     }
     
