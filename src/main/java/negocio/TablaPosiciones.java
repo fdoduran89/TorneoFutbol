@@ -19,23 +19,9 @@ public class TablaPosiciones {
     }
 
     /**
-     * Registra un partido en la tabla.
+     * Registra el resultado del partido y ajusta los puntos si hubo penales.
      *
-     * Casos:
-     *   1. El partido NO tuvo penales (no hubo empate en goles):
-     *      - El ganador suma 3 puntos como victoria.
-     *      - El perdedor suma 0 puntos como derrota.
-     *      - Si por alguna razón hubo empate sin penales, ambos suman 1.
-     *
-     *   2. El partido SÍ tuvo penales (hubo empate en goles y se
-     *      resolvió por tanda):
-     *      - El ganador de la tanda suma 3 puntos como victoria.
-     *      - El perdedor de la tanda suma 0 puntos como derrota.
-     *      - No se cuenta como empate en la tabla, aunque los goles
-     *        hayan sido iguales. Los goles a favor y en contra sí se
-     *        registran con el marcador del tiempo reglamentario.
-     *
-     * @param partido el partido ya jugado
+     * @param partido partido jugado
      */
     public void registrarPartido(Partido partido) {
         RegistroEquipo local = buscarRegistro(partido.getLocal());
@@ -57,7 +43,7 @@ public class TablaPosiciones {
                 local.registrarPartido(gfLocal, gcLocal);
                 visitante.registrarPartido(gcLocal, gfLocal);
             }
-            // Los goles ya reflejan empate; los puntos se ajustan abajo.
+            // Ajusta los puntos y contadores según el ganador de los penales.
             ajustarPuntosPorPenales(local, visitante, ganoLocal);
         } else {
             local.registrarPartido(gfLocal, gcLocal);
@@ -66,19 +52,7 @@ public class TablaPosiciones {
     }
 
     /**
-     * Ajusta los puntos de un partido resuelto por penales.
-     *
-     * El método registrarPartido de RegistroEquipo ya sumó 1 punto a
-     * cada uno por el empate en goles. Aquí se corrige para que el
-     * ganador de la tanda quede con 3 puntos y el perdedor con 0.
-     *
-     * La corrección es:
-     *   - Al ganador: sumar 2 puntos más (1 + 2 = 3).
-     *   - Al perdedor: restar 1 punto (1 - 1 = 0).
-     *
-     * Además, se corrige el contador de partidos ganados/empatados:
-     *   - Al ganador: -1 empatado, +1 ganado.
-     *   - Al perdedor: -1 empatado, +1 perdido.
+     * Ajusta los puntos y contadores del partido resuelto por penales.
      */
     private void ajustarPuntosPorPenales(RegistroEquipo local, RegistroEquipo visitante,
             boolean ganoLocal) {
@@ -89,6 +63,7 @@ public class TablaPosiciones {
         perdedor.ajustarDerrotaPorPenales();
     }
 
+    // Busca el registro del equipo.
     private RegistroEquipo buscarRegistro(Equipo equipo) {
         for (RegistroEquipo registro : registros) {
             if (registro.getEquipo() == equipo) {
@@ -98,6 +73,7 @@ public class TablaPosiciones {
         return null;
     }
 
+    // Devuelve una copia de la tabla ordenada por puntos y goles.
     public List<RegistroEquipo> obtenerOrdenada() {
         ArrayList<RegistroEquipo> copia = new ArrayList<>(registros);
 
@@ -117,6 +93,7 @@ public class TablaPosiciones {
         return copia;
     }
 
+    // Devuelve el equipo campeón y advierte si hay empate en los criterios.
     public Equipo obtenerCampeon() {
         List<RegistroEquipo> ordenada = obtenerOrdenada();
 
@@ -136,12 +113,14 @@ public class TablaPosiciones {
         return primero.getEquipo();
     }
 
+    // Comprueba si dos equipos tienen los mismos criterios de clasificación.
     private boolean hayEmpate(RegistroEquipo a, RegistroEquipo b) {
         return a.getPuntos() == b.getPuntos()
                 && a.getDiferenciaGol() == b.getDiferenciaGol()
                 && a.getGolesFavor() == b.getGolesFavor();
     }
 
+    // Muestra la tabla de posiciones ordenada.
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

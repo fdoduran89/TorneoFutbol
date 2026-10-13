@@ -1,11 +1,10 @@
 package negocio;
 
+public class DT extends Empleado {
 
-public class DT extends Empleado{
-    
     private float variable;
-    
-    //Bono que recibe el FT por ganar partidos
+
+    // Bono por ganar partidos.
     private float bono;
 
     public float getVariable() {
@@ -20,26 +19,18 @@ public class DT extends Empleado{
         this.bono = bono;
     }
 
-    /**
-     * Devuelve el bono actual del DT.
-     *
-     * OJO: el bono del DT se modifica dentro de liquidarSalario(),
-     * donde se hace bono += 1.5f. Eso significa que el valor que
-     * devuelve este método depende de cuántas veces se haya llamado
-     * a liquidarSalario() antes. Es el comportamiento original del
-     * profesor, y no se cambia aquí.
-     */
+    // Devuelve el bono actual del DT.
     @Override
     public float getBono() {
         return bono;
     }
-    
+
+    // Calcula el salario con el bono y la retención.
     @Override
-    public float liquidarSalario(){
+    public float liquidarSalario() {
         bono += 1.5f;
-        
+
         return (salario * bono) - retencion;
     }
-    
-    
+
 }

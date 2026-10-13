@@ -3,49 +3,37 @@ package negocio;
 import java.util.ArrayList;
 import java.util.Random;
 
-
 public class Partido {
 
     private int golesLocal;
-
     private int golesVisitante;
-
     private int penalesLocal;
-
     private int penalesVisitante;
-
     private Estadio estadio;
-
     private Fecha fecha;
-
     private Equipo local;
-
     private Equipo visitante;
-
     private boolean jugado;
 
-    //Goles maximos
+    // Máximo de goles por equipo.
     private static final int MAX_GOLES = 9;
 
-    //Factor de azar maximo que se suma o resta al promedio del equipo
-    //antes de redondear para obtener los goles.
+    // Variación aleatoria de los goles.
     private static final float FACTOR_AZAR = 1.0f;
 
-    //Random compartido por todos los partidos.
+    // Generador aleatorio compartido.
     private static final Random RANDOM = new Random();
 
-    //Cantidad de tiros reglamentarios por equipo en la tanda de penales.
+    // Tiros reglamentarios por equipo.
     private static final int TIROS_REGLAMENTARIOS = 5;
 
-    //Divisor del promedio del jugador para obtener su probabilidad
-    //base de convertir un penal. promedio 5 -> 0.5, promedio 8 -> 0.8.
+    // Divisor para calcular la probabilidad de penal.
     private static final float DIVISOR_PROBABILIDAD_PENAL = 10.0f;
 
-    //Factor de rendimiento de un jugador lesionado. 0.7 significa
-    //que rinde al 70% de su capacidad, tanto en cancha como en penales.
+    // Rendimiento de un jugador lesionado (70 %).
     private static final float FACTOR_LESION = 0.7f;
 
-    //Probabilidad de que un equipo sufra una lesion al final del partido.
+    // Probabilidad de lesión (20 %).
     private static final float PROBABILIDAD_LESION = 0.2f;
 
     public int getGolesLocal() {
@@ -104,10 +92,7 @@ public class Partido {
         this.visitante = visitante;
     }
 
-    /*Implementar el comportamiento del partido
-    Se realiza encapsulamiento: Dentro de esta clase se van a ejecutar
-    los métodos que va a permitir generar el resultado del partido
-     */
+    // Ejecuta el partido y genera su resultado.
     public void jugarResultado() {
 
         if (jugado) {
@@ -118,13 +103,12 @@ public class Partido {
         golesLocal = calcularGol(local);
         golesVisitante = calcularGol(visitante);
 
-        // Si hay empate en goles al final del tiempo reglamentario,
-        // se juega la tanda de penales.
+        // Si hay empate, se define por penales.
         if (golesLocal == golesVisitante) {
             jugarTandaPenales();
         }
 
-        // Al final del partido, cada equipo puede sufrir una lesion.
+        // Cada equipo puede sufrir una lesión.
         lesionarJugadorAlAzar(local);
         lesionarJugadorAlAzar(visitante);
 
@@ -134,19 +118,10 @@ public class Partido {
     }
 
     /**
-     * Calcula los goles que anota un equipo en un partido.
+     * Calcula los goles según el promedio de los jugadores y el azar.
      *
-     * Pasos:
-     *   1. Se obtiene la lista de jugadores del equipo.
-     *   2. Por cada jugador se suma su promedio, PERO si el jugador
-     *      esta lesionado se suma solo su promedio * FACTOR_LESION.
-     *      Asi, un equipo con lesionados marca menos goles.
-     *   3. Se divide entre el numero de jugadores (siempre 5).
-     *   4. Se aplica un factor de azar uniforme.
-     *   5. Se redondea, se garantiza no negativo y se capa a MAX_GOLES.
-     *
-     * @param equipo el equipo cuyos goles se calculan
-     * @return los goles anotados por el equipo (entero >= 0)
+     * @param equipo equipo cuyos goles se calculan
+     * @return cantidad de goles
      */
     private int calcularGol(Equipo equipo) {
         ArrayList<Jugador> jugadores = equipo.getJugadores();
@@ -183,16 +158,9 @@ public class Partido {
     }
 
     /**
-     * Intenta lesionar a un jugador al azar del equipo.
+     * Intenta lesionar aleatoriamente a un jugador.
      *
-     * Con probabilidad PROBABILIDAD_LESION, elige un jugador al azar
-     * y lo marca como lesionado. Si el jugador ya estaba lesionado,
-     * no se hace nada (no se "relesiona").
-     *
-     * Si no habia lesion, no imprime nada. Si hay lesion, imprime
-     * una linea avisando.
-     *
-     * @param equipo el equipo en el que se intenta la lesion
+     * @param equipo equipo donde se evalúa la lesión
      */
     private void lesionarJugadorAlAzar(Equipo equipo) {
         if (equipo == null || equipo.getJugadores().isEmpty()) {
@@ -215,20 +183,7 @@ public class Partido {
     }
 
     /**
-     * Juega la tanda de penales completa.
-     *
-     * Reglas:
-     *   - Se tiran TIROS_REGLAMENTARIOS tiros por equipo.
-     *   - En los tiros reglamentarios tiran todos los jugadores, en el
-     *     orden en que aparecen en la lista del equipo.
-     *   - Si tras los tiros reglamentarios sigue el empate, se pasa a
-     *     muerte subita: tira un jugador al azar de cada equipo, tiro a
-     *     tiro, hasta que uno acierte y el otro falle.
-     *
-     * El local tira primero en los tiros reglamentarios y tambien en
-     * la primera ronda de muerte subita.
-     *
-     * Al terminar, deja el resultado en penalesLocal y penalesVisitante.
+     * Ejecuta los penales reglamentarios y la muerte súbita.
      */
     private void jugarTandaPenales() {
         penalesLocal = 0;
@@ -237,7 +192,7 @@ public class Partido {
         ArrayList<Jugador> jugadoresLocal = local.getJugadores();
         ArrayList<Jugador> jugadoresVisitante = visitante.getJugadores();
 
-        // Tiros reglamentarios: tiran todos los jugadores, en orden de lista.
+        // Cada equipo ejecuta sus tiros reglamentarios.
         for (int i = 0; i < TIROS_REGLAMENTARIOS; i++) {
             if (i < jugadoresLocal.size() && tirarPenal(jugadoresLocal.get(i))) {
                 penalesLocal++;
@@ -247,7 +202,7 @@ public class Partido {
             }
         }
 
-        // Si tras los tiros reglamentarios siguen empatados, muerte subita.
+        // Si persiste el empate, se juega muerte súbita.
         while (penalesLocal == penalesVisitante) {
             boolean golLocal = tirarPenal(elegirTiradorAlAzar(jugadoresLocal));
             boolean golVisitante = tirarPenal(elegirTiradorAlAzar(jugadoresVisitante));
@@ -262,11 +217,10 @@ public class Partido {
     }
 
     /**
-     * Devuelve un jugador al azar de la lista recibida.
-     * Se usa en muerte subita, donde no importa quien tira.
+     * Selecciona un jugador aleatorio.
      *
-     * @param jugadores lista de jugadores del equipo
-     * @return un jugador al azar
+     * @param jugadores lista de jugadores
+     * @return jugador seleccionado
      */
     private Jugador elegirTiradorAlAzar(ArrayList<Jugador> jugadores) {
         int indice = RANDOM.nextInt(jugadores.size());
@@ -274,14 +228,10 @@ public class Partido {
     }
 
     /**
-     * Ejecuta un tiro de penal de un jugador.
+     * Simula un penal según el promedio y la lesión del jugador.
      *
-     * La probabilidad base de convertir es promedio / DIVISOR_PROBABILIDAD_PENAL.
-     * Si el jugador esta lesionado, se multiplica por FACTOR_LESION.
-     * Si el promedio es 0, la probabilidad es 0 y siempre falla.
-     *
-     * @param jugador el jugador que tira
-     * @return true si convierte el penal, false si falla
+     * @param jugador jugador que ejecuta el penal
+     * @return true si marca, false si falla
      */
     private boolean tirarPenal(Jugador jugador) {
         float probabilidad = jugador.getPromedio() / DIVISOR_PROBABILIDAD_PENAL;
@@ -297,15 +247,7 @@ public class Partido {
         return RANDOM.nextFloat() < probabilidad;
     }
 
-    /**
-     * Imprime el marcador del partido.
-     *
-     * Formato con penales:
-     *   Colombia 5(3) - 5(2) Brasil
-     *
-     * Formato sin penales:
-     *   Colombia 5 - 5 Brasil
-     */
+    // Imprime el resultado del partido, incluidos los penales si existen.
     private void imprimirResultado() {
         System.out.println("=====================================");
         System.out.println("  |  RESULTADO DEL PARTIDO  |");

@@ -24,12 +24,7 @@ public class EntrenadorFisico extends Empleado {
     }
 
     /**
-     * Devuelve el bono acumulado por este entrenador físico.
-     *
-     * El bono se calcula como curaciones * BONO_POR_CURACION.
-     * No se almacena como atributo: se deriva del contador de curaciones.
-     * Así, si en el futuro cambia el valor del bono por curación, solo
-     * hay que tocar la constante.
+     * Calcula el bono según las curaciones realizadas.
      */
     @Override
     public float getBono() {
@@ -37,15 +32,10 @@ public class EntrenadorFisico extends Empleado {
     }
 
     /**
-     * Recupera a un jugador lesionado.
+     * Recupera a un jugador lesionado y registra la curación.
      *
-     * Si el jugador ya estaba sano, no se hace nada y no se cuenta
-     * como curación. Solo se cuenta (y por tanto solo genera bono)
-     * cuando el jugador pasa de lesionado a sano.
-     *
-     * @param jugador el jugador a recuperar
-     * @return true si el jugador fue curado en esta llamada, false si
-     *         ya estaba sano o si el jugador es null
+     * @param jugador jugador a recuperar
+     * @return true si fue curado
      */
     public boolean recuperar(Jugador jugador) {
         if (jugador == null) {
@@ -60,11 +50,10 @@ public class EntrenadorFisico extends Empleado {
     }
 
     /**
-     * Recupera hasta MAX_CURACIONES_POR_LLAMADA jugadores lesionados
-     * del equipo.
+     * Recupera hasta dos jugadores lesionados del equipo.
      *
-     * @param equipo el equipo cuyos jugadores se van a recuperar
-     * @return el número de jugadores efectivamente curados en esta llamada
+     * @param equipo equipo cuyos jugadores se recuperan
+     * @return cantidad de jugadores curados
      */
     public int recuperarEquipo(Equipo equipo) {
         if (equipo == null) {
@@ -83,17 +72,7 @@ public class EntrenadorFisico extends Empleado {
     }
 
     /**
-     * Liquidación del salario del entrenador físico.
-     *
-     * El salario depende de:
-     *   - salario base (heredado de Empleado)
-     *   - bono acumulado: curaciones * BONO_POR_CURACION
-     *   - retención (heredada de Empleado)
-     *
-     * Este método es puro: no modifica el estado del objeto, así que
-     * llamarlo varias veces devuelve siempre el mismo resultado.
-     * El bono se acumula en el torneo (vía recuperar/recuperarEquipo),
-     * no aquí.
+     * Calcula el salario con el bono y la retención.
      */
     @Override
     public float liquidarSalario() {

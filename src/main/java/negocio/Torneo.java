@@ -49,8 +49,7 @@ public class Torneo {
     }
 
     /**
-     * Añade un equipo al torneo y, en la misma operación, crea su
-     * registro en la tabla de posiciones.
+     * Agrega un equipo y su registro a la tabla.
      */
     public void agregarEquipo(Equipo equipo) {
         equipos.add(equipo);
@@ -58,8 +57,7 @@ public class Torneo {
     }
 
     /**
-     * Genera el calendario de partidos "todos contra todos".
-     * Con 4 equipos se generan 6 partidos.
+     * Genera los partidos entre todos los equipos.
      */
     public void generarCalendario() {
         partidos.clear();
@@ -74,23 +72,7 @@ public class Torneo {
     }
 
     /**
-     * Juega todos los partidos del calendario y actualiza la tabla
-     * de posiciones con cada resultado.
-     *
-     * Después de cada partido, se pide al entrenador físico y al
-     * médico de los DOS equipos que intenten curar a sus jugadores
-     * lesionados. Cada uno cura hasta 2 jugadores por partido.
-     * Si el jugador se cura, el preparador o el médico suman una
-     * curación, que luego se convierte en bono al liquidar el salario.
-     *
-     * El orden es importante:
-     *   1. Se juega el partido (puede haber lesiones al final).
-     *   2. Se registra el resultado en la tabla.
-     *   3. Se intenta curar a los lesionados de ambos equipos.
-     *
-     * Así, un jugador lesionado en este partido puede curarse antes
-     * del siguiente, y el siguiente partido ya lo tiene disponible
-     * al 100% (o no, según la suerte).
+     * Juega los partidos, actualiza la tabla y cura a los lesionados.
      */
     public void jugarTorneo() {
         for (Partido partido : partidos) {
@@ -103,13 +85,9 @@ public class Torneo {
     }
 
     /**
-     * Pide al entrenador físico y al médico de un equipo que curen
-     * a sus jugadores lesionados. Cada uno cura hasta 2 por llamada.
+     * Intenta curar a los jugadores lesionados del equipo.
      *
-     * Si el equipo no tiene entrenador físico o médico, no se hace
-     * nada por ese lado.
-     *
-     * @param equipo el equipo cuyos jugadores se van a intentar curar
+     * @param equipo equipo cuyos jugadores se recuperan
      */
     private void curarJugadoresDeEquipo(Equipo equipo) {
         if (equipo == null) {
@@ -152,8 +130,7 @@ public class Torneo {
     }
 
     /**
-     * Devuelve la representación completa del torneo: nombre, tabla
-     * de posiciones y campeón.
+     * Muestra el nombre, la tabla y el campeón del torneo.
      */
     @Override
     public String toString() {

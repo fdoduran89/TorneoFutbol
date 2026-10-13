@@ -55,15 +55,13 @@ public class RegistroEquipo {
         return golesContra;
     }
 
+    // Calcula la diferencia entre goles a favor y en contra.
     public int getDiferenciaGol() {
         return golesFavor - golesContra;
     }
 
     /**
-     * Registra el resultado de un partido para este equipo.
-     * Como se explica en TablaPosiciones, los partidos con penales
-     * entran aquí como empate (goles iguales), y luego se ajustan
-     * con ajustarVictoriaPorPenales o ajustarDerrotaPorPenales.
+     * Registra el resultado y asigna los puntos correspondientes.
      */
     public void registrarPartido(int golesFavor, int golesContra) {
         this.partidosJugados++;
@@ -82,20 +80,7 @@ public class RegistroEquipo {
     }
 
     /**
-     * Ajusta los contadores y puntos cuando el equipo ganó por penales
-     * un partido que había terminado empatado en goles.
-     *
-     * Estado previo tras registrarPartido:
-     *   - partidosEmpatados +1
-     *   - puntos +1
-     *
-     * Estado deseado:
-     *   - partidosGanados +1
-     *   - puntos +3
-     *
-     * Por tanto:
-     *   - partidosEmpatados -1, partidosGanados +1
-     *   - puntos +2 (1 + 2 = 3)
+     * Actualiza el resultado cuando el equipo gana por penales.
      */
     public void ajustarVictoriaPorPenales() {
         this.partidosEmpatados--;
@@ -104,20 +89,7 @@ public class RegistroEquipo {
     }
 
     /**
-     * Ajusta los contadores y puntos cuando el equipo perdió por penales
-     * un partido que había terminado empatado en goles.
-     *
-     * Estado previo tras registrarPartido:
-     *   - partidosEmpatados +1
-     *   - puntos +1
-     *
-     * Estado deseado:
-     *   - partidosPerdidos +1
-     *   - puntos 0
-     *
-     * Por tanto:
-     *   - partidosEmpatados -1, partidosPerdidos +1
-     *   - puntos -1 (1 - 1 = 0)
+     * Actualiza el resultado cuando el equipo pierde por penales.
      */
     public void ajustarDerrotaPorPenales() {
         this.partidosEmpatados--;
@@ -125,6 +97,7 @@ public class RegistroEquipo {
         this.puntos -= 1;
     }
 
+    // Devuelve los datos del equipo en formato de tabla.
     @Override
     public String toString() {
         return String.format("%-10s %2d  %2d  %2d  %2d  %2d  %2d  %3d  %3d",

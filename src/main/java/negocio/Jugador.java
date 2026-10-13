@@ -2,31 +2,25 @@ package negocio;
 
 
 public class Jugador extends Empleado{
-    
-    /*
-    Se definen los atributos especificos de un jugador
-    */
-    
+
+    // Atributos específicos del jugador.
+
     private boolean capitan;
-    
+
     private boolean lesionado;
-    
+
     private int numeroCamiseta;
-    
-    /*
-    Definimos las habilidades del jugador
-    */
-    
+
+    // Habilidades del jugador.
+
     private int cabeza;
-    
+
     private int regate;
-    
+
     private int velocidad;
-    
-    /*
-    Se define el promedio de las habilidades del jugador
-    */
-    
+
+    // Promedio de las habilidades.
+
     private float promedio;
 
     public boolean isCapitan() {
@@ -84,15 +78,16 @@ public class Jugador extends Empleado{
     /*public void setPromedio(float promedio) {
         this.promedio = promedio;
     }*/
-    
-    
-    //El promedio se va a calcular dentro de la clase
-    
+
+    // Calcula y muestra el promedio del jugador.
+
     public void obtenerPromedio(){
         promedio = calcularPromedioJugador();
         System.out.println("El promedio del jugador: "+ nombre + " es: "+ promedio);
     }
-    
+
+    // Calcula el promedio y lo redondea a un decimal.
+
     private float calcularPromedioJugador(){
         float calculo = (cabeza + regate + velocidad) / 3.0f;
         this.promedio = Math.round(calculo * 10.0f) / 10.0f;

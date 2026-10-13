@@ -34,10 +34,7 @@ public class Medico extends Empleado {
     }
 
     /**
-     * Devuelve el bono acumulado por este médico.
-     *
-     * El bono se calcula como curaciones * BONO_POR_CURACION.
-     * No se almacena como atributo: se deriva del contador de curaciones.
+     * Calcula el bono según las curaciones realizadas.
      */
     @Override
     public float getBono() {
@@ -45,14 +42,10 @@ public class Medico extends Empleado {
     }
 
     /**
-     * Recupera a un jugador lesionado.
+     * Recupera a un jugador lesionado y registra la curación.
      *
-     * Misma lógica que en EntrenadorFisico: solo cuenta como curación
-     * si el jugador pasa de lesionado a sano.
-     *
-     * @param jugador el jugador a recuperar
-     * @return true si el jugador fue curado en esta llamada, false en
-     *         caso contrario
+     * @param jugador jugador a recuperar
+     * @return true si fue curado
      */
     public boolean recuperar(Jugador jugador) {
         if (jugador == null) {
@@ -67,11 +60,10 @@ public class Medico extends Empleado {
     }
 
     /**
-     * Recupera hasta MAX_CURACIONES_POR_LLAMADA jugadores lesionados
-     * del equipo.
+     * Recupera hasta dos jugadores lesionados del equipo.
      *
-     * @param equipo el equipo cuyos jugadores se van a recuperar
-     * @return el número de jugadores efectivamente curados en esta llamada
+     * @param equipo equipo cuyos jugadores se recuperan
+     * @return cantidad de jugadores curados
      */
     public int recuperarEquipo(Equipo equipo) {
         if (equipo == null) {
@@ -90,11 +82,7 @@ public class Medico extends Empleado {
     }
 
     /**
-     * Liquidación del salario del médico.
-     *
-     * Misma fórmula que EntrenadorFisico. El bono se acumula por
-     * curaciones durante el torneo y se materializa al liquidar.
-     * Método puro: no modifica el estado del objeto.
+     * Calcula el salario con el bono y la retención.
      */
     @Override
     public float liquidarSalario() {

@@ -1,16 +1,12 @@
-
 package negocio;
 
 
 public class Persona {
-    /*
-    Utilizamos protected en los atributos para que solo puedan ser accedidos
-    por las clases hijas
-    */
+    // Atributos accesibles por las clases hijas.
     protected String nombre;
-    
+
     protected String apellido;
-    
+
     protected String cedula;
 
     public String getNombre() {
@@ -36,7 +32,7 @@ public class Persona {
     public void setCedula(String cedula) {
         this.cedula = cedula;
     }
-    
-    
-    
+
+
+
 }
